@@ -24,15 +24,19 @@ export type TCharacter = {
       weight: string;
 }
 
-export const getCharacters = async (): Promise<{
+export const getCharacters = async (
+    params: { limit: number; skip: number; query: string}
+): Promise<{
     limit: number;
     skip: number;
     total: number;
     products: TCharacter[];
 }> => {
-    const response = await api.get("/products",{
-        params:{
-            limit:2,
+    const response = await api.get("/products/search", {
+          params: {
+            limit: params.limit ?? 10,
+            skip: params.skip ?? 0,
+            q: params.query ?? "",
         },
     })
     return response.data;
