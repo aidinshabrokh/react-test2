@@ -5,13 +5,13 @@ const App = () => {
   const [characters, setCharacters] = useState<TCharacter[]>([]);
  
   const searchParams = new URLSearchParams(window.location.search);
-  const initialQuery = searchParams.get("query") || "";
-  const initialLimit = Number(searchParams.get("limit")) || 0;
-  const initialSkip = Number(searchParams.get("skip")) || 0;
+  const queryInit = searchParams.get("query") || "";
+  const limitInit = Number(searchParams.get("limit")) || 0;
+  const skipInit = Number(searchParams.get("skip")) || 0;
  
-  const [query, setQuery] = useState(initialQuery);
-  const [limit, setLimit] = useState(initialLimit);
-  const [skip, setSkip] = useState(initialSkip);
+  const [query, setQuery] = useState(queryInit);
+  const [limit, setLimit] = useState(limitInit);
+  const [skip, setSkip] = useState(skipInit);
 
   const fetchCharacters = async () => {
     const response = await getCharacters({ limit, skip, query });
@@ -22,7 +22,7 @@ const App = () => {
     fetchCharacters();
   }, []);
 
-  const updateURL = () => {
+  const editURL = () => {
     const params = new URLSearchParams();
     if (query) params.set("query", query);
     params.set("limit", String(limit));
@@ -35,24 +35,30 @@ const App = () => {
   };
 
   return (
-  <div className="p-4">
-    <h1 className="text-xl font-bold mb-4">Characters</h1>
+  <div className="min-h-screen bg-slate-900 text-gray-100">
     
-     <div className="flex gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="border p-2 rounded"
-        />
+    <header className="bg-slate-800 text-white p-6 shadow-md">
+       <h1 className="text-3xl font-extrabold tracking-wide">Products</h1>
+    </header>
+    
+    <main className="max-w-6xl mx-auto p-6">
+        <div className="flex flex-wrap gap-4 mb-8 items-end bg-gray-100 p-6 text-slate-900 rounded-xl shadow">
+          <div className="flex flex-col">
+            <input
+              type="text"
+              placeholder="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="border border-gray-300 p-3 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700"
+            />
+          </div>
 
        <div className="flex flex-col">
-          <label className="text-sm mb-1">limit</label>
+          <label className="text-sm font-medium mb-3 ml-4">limit</label>
           <select
             value={limit}
             onChange={(e) => setLimit(Number(e.target.value))}
-            className="border p-2 rounded"
+            className="border border-gray-300 p-3 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700"
           >
             <option value={0}>0</option>
             <option value={1}>1</option>
@@ -79,11 +85,11 @@ const App = () => {
         </div>
 
         <div className="flex flex-col">
-          <label className="text-sm mb-1">skip</label>
+          <label className="text-sm font-medium mb-3 ml-4">skip</label>
           <select
             value={skip}
             onChange={(e) => setSkip(Number(e.target.value))}
-            className="border p-2 rounded"
+            className="border border-gray-300 p-3 rounded-lg bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-700"
           >
             <option value={0}>0</option>
             <option value={1}>1</option>
@@ -109,19 +115,21 @@ const App = () => {
           </select>
         </div>
 
-        <button onClick={updateURL} className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button onClick={editURL} className="bg-slate-800 text-white hover:bg-gray-500 px-8 py-3 rounded-lg shadow font-semibold transition">
         apply
         </button>
       </div>
     
-    <div className="grid grid-cols-2 gap-4">
-     {characters.map((character) => (
-       <div className="border p-2 rounded-b-md" key={character.id}>
-         <h1>{character.title}</h1>
-         <p className="text-sm text-gray-500">{character.description}</p>
+     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {characters.map((character) => (
+        <div className="bg-white text-slate-900 border border-gray-200 rounded-xl hover:bg-gray-400 transition p-5"
+         key={character.id}>
+         <h2 className="font-bold text-xl mb-2 tracking-tight">{character.title}</h2>
+         <p className="text-gray-700 leading-relaxed">{character.description}</p>
        </div>
      ))}
-    </div>
+     </div>
+   </main>
   </div>
   );  
 };
